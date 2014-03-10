@@ -1,0 +1,31 @@
+#!/bin/bash
+
+vpnname="cyso-1"
+# No need to make changes below this line
+LC_ALL=C
+LANG=C
+
+progname=`basename $0`
+exec 2>&1
+
+die()
+{
+	echo "$@"
+	exit 1
+}
+
+vpnuuid=$(nmcli con list | grep -E "^$vpnname[[:space:]]" | awk '{ print $2;}')
+[ -z "$vpnuuid" ] && die "No VPN with name $vpnname found"
+
+(
+while [ "true" ]
+do
+	if nmcli con status uuid $vpnuuid 2>&1 >/dev/null; then
+		:
+	else
+		echo "Disconnected, trying to reconnect..."
+		(sleep 0.2s && nmcli con up uuid $vpnuuid)
+	fi
+	sleep 5
+done
+) | logger -t $progname -p daemon.info
