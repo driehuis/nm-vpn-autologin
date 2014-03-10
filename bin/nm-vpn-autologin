@@ -1,6 +1,7 @@
 #!/bin/bash
 
-vpnname="cyso-1"
+vpnname="vpn-1"
+
 # No need to make changes below this line
 LC_ALL=C
 LANG=C
