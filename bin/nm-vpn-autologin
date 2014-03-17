@@ -3,7 +3,7 @@
 # nm-vpn-autologin
 # A script to keep your NetworkManager VPN up (or die trying: it obviously
 # won't succceed if your network connection is down or iffy)
-# Call this from your .xsessionrc or your Startup Applications.
+# Call this from your Startup Applications.
 # Licensed under the MIT license, (c) 2014 Bert Driehuis <driehuis@playbeing.org>
 
 # Edit this line to set the name of the NetworkManager VPN that you want to
