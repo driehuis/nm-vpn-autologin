@@ -3,8 +3,8 @@
 # nm-vpn-autologin
 # A script to keep your NetworkManager VPN up (or die trying: it obviously
 # won't succceed if your network connection is down or iffy)
-# Call this from your Startup Applications.
-# Licensed under the MIT license, (c) 2014 Bert Driehuis <driehuis@playbeing.org>
+# Call this from your Startup Applications, or from .xsessionrc.
+# Licensed under the MIT license, (c) 2014-2016 Bert Driehuis <driehuis@playbeing.org>
 
 # Edit this line to set the name of the NetworkManager VPN that you want to
 # up (or better yet, put that line in ~/etc/nm-vpn-autologin.conf)
@@ -27,13 +27,13 @@ die()
 
 [ -z "$vpnname" ] && die "Define your VPN name in ~/etc/nm-vpn-autologin.conf"
 
-vpnuuid=$(nmcli con list | grep -E "^$vpnname[[:space:]]" | awk '{ print $2;}')
+vpnuuid=$(nmcli con show | grep -E "^$vpnname[[:space:]]" | awk '{ print $2;}')
 [ -z "$vpnuuid" ] && die "No VPN with name $vpnname found"
 
 (
 while [ "true" ]
 do
-	if nmcli con status uuid $vpnuuid 2>&1 >/dev/null; then
+	if [ -n "`nmcli --fields GENERAL.DEVICES con show uuid $vpnuuid 2>/dev/null`" ]; then
 		:
 	else
 		echo "Disconnected, trying to reconnect..."
